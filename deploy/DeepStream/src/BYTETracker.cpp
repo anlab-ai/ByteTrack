@@ -80,7 +80,7 @@ vector<STrack> BYTETracker::update(const vector<NvObject> &nvObjects) {
             track->update(*det, this->frame_id);
             activated_stracks.push_back(*track);
         } else {
-            track->re_activate(*det, this->frame_id, false);
+            track->re_activate(*det, this->frame_id);
             refind_stracks.push_back(*track);
         }
     }
@@ -113,7 +113,7 @@ vector<STrack> BYTETracker::update(const vector<NvObject> &nvObjects) {
             track->update(*det, this->frame_id);
             activated_stracks.push_back(*track);
         } else {
-            track->re_activate(*det, this->frame_id, false);
+            track->re_activate(*det, this->frame_id);
             refind_stracks.push_back(*track);
         }
     }
@@ -154,7 +154,7 @@ vector<STrack> BYTETracker::update(const vector<NvObject> &nvObjects) {
         STrack *track = &detections[u_detection[i]];
         if (track->score < this->high_thresh)
             continue;
-        track->activate(this->kalman_filter, this->frame_id);
+        track->activate(this->latest_id++, this->kalman_filter, this->frame_id);
         activated_stracks.push_back(*track);
     }
 

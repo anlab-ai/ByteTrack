@@ -30,13 +30,11 @@ public:
 
     void mark_removed();
 
-    int next_id();
-
     int end_frame();
 
-    void activate(byte_kalman::KalmanFilter &kalman_filter, int frame_id);
+    void activate(int track_id, byte_kalman::KalmanFilter &kalman_filter, int frame_id);
 
-    void re_activate(STrack &new_track, int frame_id, bool new_id = false);
+    void re_activate(STrack &new_track, int frame_id);
 
     void update(STrack &new_track, int frame_id);
 

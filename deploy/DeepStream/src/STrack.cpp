@@ -26,10 +26,10 @@ STrack::STrack(vector<float> tlwh_, float score, int label, NvMOTObjToTrack *ass
 STrack::~STrack() {
 }
 
-void STrack::activate(byte_kalman::KalmanFilter &kalman_filter, int frame_id) {
+void STrack::activate(int track_id, byte_kalman::KalmanFilter &kalman_filter, int frame_id) {
     this->kalman_filter = kalman_filter;
-    this->track_id      = this->next_id();
-
+    this->track_id = track_id;
+    
     vector<float> _tlwh_tmp(4);
     _tlwh_tmp[0] = this->_tlwh[0];
     _tlwh_tmp[1] = this->_tlwh[1];
@@ -58,7 +58,7 @@ void STrack::activate(byte_kalman::KalmanFilter &kalman_filter, int frame_id) {
     this->start_frame  = frame_id;
 }
 
-void STrack::re_activate(STrack &new_track, int frame_id, bool new_id) {
+void STrack::re_activate(STrack &new_track, int frame_id) {
     vector<float> xyah = tlwh_to_xyah(new_track.tlwh);
     DETECTBOX     xyah_box;
     xyah_box[0] = xyah[0];
@@ -80,8 +80,6 @@ void STrack::re_activate(STrack &new_track, int frame_id, bool new_id) {
     this->associatedObjectIn = new_track.associatedObjectIn;
     this->original_tlwh.resize(4);
     this->original_tlwh.assign(new_track.original_tlwh.begin(), new_track.original_tlwh.end());
-    if (new_id)
-        this->track_id = next_id();
 }
 
 void STrack::update(STrack &new_track, int frame_id) {
@@ -160,12 +158,6 @@ void STrack::mark_lost() {
 
 void STrack::mark_removed() {
     state = TrackState::Removed;
-}
-
-int STrack::next_id() {
-    static int _count = 0;
-    _count++;
-    return _count;
 }
 
 int STrack::end_frame() {

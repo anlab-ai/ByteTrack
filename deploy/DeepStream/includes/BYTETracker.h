@@ -53,6 +53,7 @@ private:
     float match_thresh;
     int   frame_id;
     int   max_time_lost;
+    int latest_id = 0;
 
     vector<STrack>            tracked_stracks;
     vector<STrack>            lost_stracks;
